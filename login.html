@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSphere | Sign In</title>
+  <meta name="description" content="Sign in to the EcoSphere ESG Management Platform.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --rl: 16px;
+      --rm: 12px;
+      --rs: 8px;
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-dark);
+      font-family: var(--font-sans);
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--rl);
+      padding: 40px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      box-sizing: border-box;
+    }
+
+    body.light-theme .login-card {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary-green);
+      letter-spacing: -1px;
+      margin: 0;
+    }
+
+    .login-subtitle {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--white);
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    body.light-theme .form-input {
+      background: rgba(0, 0, 0, 0.02);
+      color: #1A1A1A;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-green);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    body.light-theme .form-input:focus {
+      background: #FFFFFF;
+    }
+
+    .btn-login {
+      width: 100%;
+      background: var(--primary-green);
+      border: 1px solid var(--primary-green);
+      color: #FFFFFF;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(135, 90, 123, 0.2);
+    }
+
+    .btn-login:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(135, 90, 123, 0.35);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 28px 0;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .divider:not(:empty)::before {
+      margin-right: 12px;
+    }
+
+    .divider:not(:empty)::after {
+      margin-left: 12px;
+    }
+
+    .quick-roles-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .quick-roles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quick-role-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    body.light-theme .quick-role-card {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .quick-role-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--primary-green);
+      transform: translateX(4px);
+    }
+
+    body.light-theme .quick-role-card:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .quick-role-card.selected {
+      border-color: var(--primary-green);
+      background: rgba(135, 90, 123, 0.12);
+    }
+
+    body.light-theme .quick-role-card.selected {
+      background: rgba(135, 90, 123, 0.06);
+    }
+
+    .quick-role-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-subtle);
+    }
+
+    .quick-role-card.selected .quick-role-avatar {
+      border-color: var(--primary-green);
+    }
+
+    .quick-role-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quick-role-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .quick-role-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:500px; align-items:flex-start;">
+    <!-- Back Button to About Page -->
+    <a href="index.html" style="display:inline-flex; align-items:center; gap:6px; color:var(--text-muted); text-decoration:none; font-size:13px; font-weight:600; transition:color 0.2s;" onmouseover="this.style.color='var(--primary-green)'" onmouseout="this.style.color='var(--text-muted)'" id="back-to-about">
+      <i data-lucide="arrow-left" style="width:16px; height:16px; vertical-align:middle;"></i> Back to About Page
+    </a>
+
+    <div class="login-card" style="width:100%;">
+      <div class="login-header">
+      <h1 class="login-title">EcoSphere</h1>
+      <div class="login-subtitle">ESG Management Platform</div>
+    </div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username or Email</label>
+        <input class="form-input" type="text" id="username" placeholder="enter username or select profile below..." required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" value="••••••••" required>
+      </div>
+
+      <button class="btn-login" type="submit" id="btn-submit">
+        <span>Sign In</span>
+        <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+      </button>
+    </form>
+
+    <div class="divider">or quick access hackathon profiles</div>
+
+    <div class="quick-roles-list">
+      <div class="quick-role-card selected" data-user="Amit Mehta" data-role="Sustainability Director & R&D Lead" data-avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" data-xp="1420">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Amit" class="quick-role-avatar">
+        <div class="quick-role-details">
+          <span class="quick-role-name">Amit Mehta (You)</span>
+          <span class="quick-role-title">Sustainability Director & R&D Lead</span>
+        </div>
+      </div>
+
+      <div class="quick-role-card" data-user="Priya Sharma" data-role="Manufacturing Head" data-avatar="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" data-xp="820">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Priya" class="quick-role-avatar">
+        <div class="quick-role-details">
+          <span class="quick-role-name">Priya Sharma</span>
+          <span class="quick-role-title">Manufacturing Head</span>
+        </div>
+      </div>
+
+      <div class="quick-role-card" data-user="Rajiv Nair" data-role="Logistics Head" data-avatar="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" data-xp="640">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Rajiv" class="quick-role-avatar">
+        <div class="quick-role-details">
+          <span class="quick-role-name">Rajiv Nair</span>
+          <span class="quick-role-title">Logistics Head</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  // Apply visual theme loaders immediately
+  (function() {
+    const savedTheme = localStorage.getItem("themeMode");
+    if (savedTheme === "light") {
+      document.body.classList.add("light-theme");
+    } else {
+      document.body.classList.remove("light-theme");
+    }
+
+    const savedAccent = localStorage.getItem("themeAccentColor");
+    if (savedAccent) {
+      document.documentElement.style.setProperty('--primary-green', savedAccent);
+    }
+  })();
+
+  window.addEventListener("load", function() {
+    if (window.lucide) window.lucide.createIcons();
+
+    // Check if already logged in and redirect if so
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      window.location.href = "dashboard.html";
+      return;
+    }
+
+    // Bind Quick Access Cards
+    const cards = document.querySelectorAll(".quick-role-card");
+    const usernameInput = document.getElementById("username");
+
+    // Initialize with first profile selected
+    if (cards.length > 0) {
+      usernameInput.value = cards[0].getAttribute("data-user");
+    }
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        cards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        usernameInput.value = card.getAttribute("data-user");
+      });
+    });
+
+    // Form Submission
+    const form = document.getElementById("login-form");
+    const btnSubmit = document.getElementById("btn-submit");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      btnSubmit.innerHTML = '<span>Signing In...</span><span class="spin"></span>';
+      btnSubmit.disabled = true;
+
+      const username = usernameInput.value.trim();
+      const selectedCard = document.querySelector(".quick-role-card.selected");
+
+      let finalUser = "Amit Mehta";
+      let finalRole = "Sustainability Director & R&D Lead";
+      let finalDept = "R&D";
+      let finalXP = 1420;
+      let finalAvatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80";
+
+      // If username typed matches a profile name, or if card is selected and match
+      if (selectedCard && username === selectedCard.getAttribute("data-user")) {
+        finalUser = selectedCard.getAttribute("data-user");
+        finalRole = selectedCard.getAttribute("data-role");
+        finalXP = parseInt(selectedCard.getAttribute("data-xp")) || 100;
+        finalAvatar = selectedCard.getAttribute("data-avatar");
+        if (finalUser === "Priya Sharma") finalDept = "Manufacturing";
+        else if (finalUser === "Rajiv Nair") finalDept = "Logistics";
+        else finalDept = "R&D";
+      } else {
+        // Evaluate input string
+        const lower = username.toLowerCase();
+        if (lower.includes("priya")) {
+          finalUser = "Priya Sharma";
+          finalRole = "Manufacturing Head";
+          finalDept = "Manufacturing";
+          finalXP = 820;
+          finalAvatar = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80";
+        } else if (lower.includes("rajiv")) {
+          finalUser = "Rajiv Nair";
+          finalRole = "Logistics Head";
+          finalDept = "Logistics";
+          finalXP = 640;
+          finalAvatar = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80";
+        } else if (lower.includes("amit") || lower.includes("mehta")) {
+          finalUser = "Amit Mehta";
+          finalRole = "Sustainability Director & R&D Lead";
+          finalDept = "R&D";
+          finalXP = 1420;
+          finalAvatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80";
+        } else {
+          finalUser = username;
+          finalRole = "ESG Officer";
+          finalDept = "Corporate";
+          finalXP = 100;
+          finalAvatar = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80";
+        }
+      }
+
+      // Save user to LocalStorage
+      const currentUser = {
+        name: finalUser,
+        role: finalRole,
+        department: finalDept,
+        xp: finalXP,
+        badges: finalXP >= 1000 ? ["Green Beginner", "Carbon Saver"] : ["Green Beginner"],
+        avatar: finalAvatar
+      };
+
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+      // Synchronize standalone profile keys
+      localStorage.setItem("userName", finalUser);
+      localStorage.setItem("userRole", finalRole);
+      localStorage.setItem("userDept", finalDept);
+      localStorage.setItem("userAvatar", finalAvatar);
+      localStorage.setItem("userEmail", finalUser.toLowerCase().replace(" ", ".") + "@ecosphere.in");
+      localStorage.setItem("userPhone", "+91 98765 43210");
+      localStorage.setItem("userLoc", "Mumbai, India");
+      localStorage.setItem("userEid", "EMP-" + finalDept.substring(0, 3).toUpperCase() + "-00" + Math.floor(Math.random() * 90 + 10));
+
+      setTimeout(function() {
+        window.location.href = "dashboard.html";
+      }, 800);
+    });
+  });
+</script>
+</body>
+</html>

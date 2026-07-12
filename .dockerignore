@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+*.egg
+*.whl
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+/static/
+/media/
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/
+
+# Data files
+*.csv
+*.json.bak
+
+# Environment
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+env/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Assets not needed in container
+esg_hero_illustration.png

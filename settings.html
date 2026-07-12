@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSphere | Settings</title>
+  <script>
+    const t = localStorage.getItem("themeMode");
+    if (t === "light") {
+      document.documentElement.classList.add("light-theme");
+      document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("light-theme");
+      });
+    }
+  </script>
+  <meta name="description" content="Manage your EcoSphere account preferences, notifications, security, ESG settings, and AI preferences.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --se-purple: #875A7B; --se-teal: #00A09D; --se-green: #2ECC71;
+      --se-blue: #3DBBFF; --se-violet: #A06AB4; --se-gold: #E9A130;
+      --se-red: #DC3545; --rl: 16px; --rm: 12px; --rs: 8px;
+    }
+
+    .se-page { min-height: 100vh; background: var(--bg-dark); font-family: var(--font-sans); }
+    .se-nav {
+      height: 60px; background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; position: sticky; top: 0; z-index: 200;
+      backdrop-filter: blur(10px);
+    }
+    .se-logo { font-size: 18px; font-weight: 700; color: var(--se-purple); letter-spacing: -.5px; }
+    .se-bc { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .se-bc a { color: var(--text-muted); text-decoration: none; }
+    .se-bc a:hover { color: var(--white); }
+    .se-wrap { max-width: 1280px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 240px 1fr; gap: 40px; }
+    @media (max-width: 900px) { .se-wrap { grid-template-columns: 1fr; gap: 24px; } }
+
+    /* Left Sidebar Navigation */
+    .se-sidebar { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 92px; height: fit-content; }
+    .se-side-btn {
+      display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+      font-size: 14px; font-weight: 600; border: none; border-radius: 8px;
+      cursor: pointer; color: var(--text-muted); background: none; text-align: left;
+      transition: all .2s;
+    }
+    .se-side-btn i { width: 16px; height: 16px; }
+    .se-side-btn:hover { color: var(--white); background: rgba(255,255,255,.04); }
+    .se-side-btn.active { color: var(--se-purple); background: rgba(135,90,123,.12); }
+
+    /* Right content pane */
+    .se-main { background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--rm); padding: 32px; min-height: 500px; }
+    .se-section { display: none; }
+    .se-section.active { display: block; animation: fadeInUp .3s ease forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .se-sec-title { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 6px; letter-spacing: -.5px; }
+    .se-sec-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
+
+    /* Settings Groups */
+    .se-group { margin-bottom: 28px; }
+    .se-group-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .5px; }
+    .se-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); gap: 20px; }
+    .se-row:last-child { border-bottom: none; }
+    .se-row-info { display: flex; flex-direction: column; gap: 4px; }
+    .se-row-lbl { font-size: 14px; font-weight: 600; color: var(--white); }
+    .se-row-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    /* Premium Form Controls */
+    .se-input {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border-subtle);
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--white);
+      transition: all .2s; width: 100%; max-width: 320px;
+    }
+    .se-input:focus { border-color: var(--se-purple); outline: none; background: rgba(255,255,255,.05); }
+    
+    .se-select {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border-subtle);
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--white);
+      transition: all .2s; width: 100%; max-width: 320px; cursor: pointer;
+    }
+    .se-select:focus { border-color: var(--se-purple); outline: none; }
+
+    /* Toggles (Slack style) */
+    .se-toggle {
+      position: relative; display: inline-block; width: 44px; height: 24px;
+      flex-shrink: 0; cursor: pointer;
+    }
+    .se-toggle input { opacity: 0; width: 0; height: 0; }
+    .se-toggle-slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background-color: rgba(255,255,255,.1); border: 1px solid var(--border-subtle);
+      border-radius: 24px; transition: .25s;
+    }
+    .se-toggle-slider:before {
+      content: ""; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background-color: var(--text-muted); border-radius: 50%; transition: .25s;
+    }
+    .se-toggle input:checked + .se-toggle-slider { background-color: var(--se-purple); border-color: var(--se-purple); }
+    .se-toggle input:checked + .se-toggle-slider:before { transform: translateX(20px); background-color: #fff; }
+
+    /* Profile Pic Layout */
+    .se-avatar-row { display: flex; align-items: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border-subtle); }
+    .se-avatar-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid var(--se-purple); }
+    .se-btn-outline {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border-subtle);
+      border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600;
+      color: var(--white); cursor: pointer; transition: all .2s;
+    }
+    .se-btn-outline:hover { background: rgba(255,255,255,.08); border-color: var(--se-purple); }
+
+    /* Textarea */
+    .se-textarea {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border-subtle);
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--white);
+      resize: vertical; min-height: 80px; width: 100%; max-width: 320px;
+    }
+    .se-textarea:focus { border-color: var(--se-purple); outline: none; }
+
+    /* Danger Button */
+    .se-btn-danger {
+      background: rgba(220,53,69,.12); border: 1px solid rgba(220,53,69,.3);
+      border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 600;
+      color: var(--se-red); cursor: pointer; transition: all .2s;
+    }
+    .se-btn-danger:hover { background: rgba(220,53,69,.22); }
+
+    /* Bottom Action Bar */
+    .se-footer {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+      background: var(--sidebar-bg); border-top: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: flex-end; padding: 0 40px;
+      gap: 12px; z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Accent color dots */
+    .accent-group { display: flex; gap: 8px; }
+    .accent-dot {
+      width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: transform .2s;
+    }
+    .accent-dot:hover { transform: scale(1.15); }
+    .accent-dot.active { border-color: #fff; transform: scale(1.1); }
+
+    /* Lists and Tables */
+    .se-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
+    .se-table th { text-align: left; padding: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle); }
+    .se-table td { padding: 12px 10px; border-bottom: 1px solid var(--border-subtle); color: var(--white); }
+    .se-table tr:last-child td { border-bottom: none; }
+
+    .se-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+    .se-badge.success { background: rgba(46,204,113,.15); color: var(--se-green); }
+
+    /* Compact / Normal Mode demo */
+    .se-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
+    .se-card-demo { border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; font-size: 12px; }
+
+    /* Help center list */
+    .support-list { display: flex; flex-direction: column; gap: 12px; }
+    .support-item {
+      display: flex; align-items: center; gap: 14px; padding: 14px;
+      background: rgba(255,255,255,.02); border: 1px solid var(--border-subtle);
+      border-radius: 10px; cursor: pointer; transition: all .2s;
+    }
+    .support-item:hover { background: rgba(255,255,255,.05); border-color: var(--se-purple); transform: translateX(3px); }
+    .support-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(135,90,123,.12); color: var(--se-purple); }
+    .support-icon i { width: 16px; height: 16px; }
+
+    /* Animations */
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Light Theme Adjustments */
+    body.light-theme .se-nav { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    body.light-theme .se-main { background: #fff; border-color: rgba(0,0,0,.09); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+    body.light-theme .se-row { border-bottom-color: rgba(0,0,0,.06); }
+    body.light-theme .se-textarea, body.light-theme .se-input, body.light-theme .se-select { background: rgba(0,0,0,.02); border-color: rgba(0,0,0,0.12); color: #121214; }
+    body.light-theme .se-textarea:focus, body.light-theme .se-input:focus, body.light-theme .se-select:focus { border-color: var(--se-purple); background: #fff; }
+    body.light-theme .se-side-btn:hover { background: rgba(0,0,0,.03); }
+    body.light-theme .se-side-btn.active { background: rgba(135,90,123,.08); }
+    body.light-theme .se-btn-outline { background: #fff; border-color: rgba(0,0,0,0.15); color: #121214; }
+    body.light-theme .se-btn-outline:hover { background: rgba(0,0,0,0.02); border-color: var(--se-purple); }
+    body.light-theme .se-footer { background: #fff; border-top: 1px solid rgba(0,0,0,0.08); box-shadow: 0 -2px 10px rgba(0,0,0,0.03); }
+
+    /* Dropdown Option Visibility Style Rules */
+    select option {
+      background-color: #1B1B1E !important; /* matches dark sidebar background */
+      color: #F5F5F5 !important;
+    }
+    body.light-theme select option {
+      background-color: #FFFFFF !important;
+      color: #121214 !important;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="se-nav">
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span class="se-logo">EcoSphere</span>
+    <div class="se-bc">
+      <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+      <a href="dashboard.html">Dashboard</a>
+      <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+      <span style="color:var(--white);">Settings</span>
+    </div>
+  </div>
+  <button onclick="window.location.href='dashboard.html'" class="se-btn-outline" style="display:flex;align-items:center;gap:6px;">
+    <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to Dashboard
+  </button>
+</nav>
+
+<div class="se-page"><div class="se-wrap">
+  
+  <!-- LEFT SIDEBAR -->
+  <aside class="se-sidebar">
+    <button class="se-side-btn active" onclick="switchSection('profile')"><i data-lucide="user"></i> Profile</button>
+    <button class="se-side-btn" onclick="switchSection('account')"><i data-lucide="shield-alert"></i> Account</button>
+    <button class="se-side-btn" onclick="switchSection('notifications')"><i data-lucide="bell"></i> Notifications</button>
+    <button class="se-side-btn" onclick="switchSection('appearance')"><i data-lucide="palette"></i> Appearance</button>
+    <button class="se-side-btn" onclick="switchSection('privacy')"><i data-lucide="lock"></i> Privacy</button>
+    <button class="se-side-btn" onclick="switchSection('security')"><i data-lucide="key-round"></i> Security</button>
+    <button class="se-side-btn" onclick="switchSection('esg')"><i data-lucide="leaf"></i> ESG Preferences</button>
+    <button class="se-side-btn" onclick="switchSection('ai')"><i data-lucide="cpu"></i> AI Preferences</button>
+    <button class="se-side-btn" onclick="switchSection('support')"><i data-lucide="help-circle"></i> Support</button>
+  </aside>
+
+  <!-- RIGHT SETTINGS BODY -->
+  <main class="se-main">
+    
+    <!-- PROFILE SECTION -->
+    <section class="se-section active" id="sec-profile">
+      <h2 class="se-sec-title">Profile Settings</h2>
+      <p class="se-sec-desc">Update your avatar, profile status, location, and other basic info.</p>
+      
+      <div class="se-avatar-row">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="se-avatar-img" id="s-avatar-img">
+        <div>
+          <button class="se-btn-outline" onclick="changeAvatar()"><i data-lucide="upload" style="width:12px;height:12px;display:inline-block;margin-right:4px;"></i> Upload Photo</button>
+          <button class="se-btn-outline" style="color:var(--se-red);border-color:rgba(220,53,69,.2);margin-left:8px;" onclick="resetAvatar()">Remove</button>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">JPG, PNG or GIF. Max size 25MB.</p>
+        </div>
+      </div>
+
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Full Name</span><span class="se-row-desc">Enter your preferred name for directories.</span></div>
+          <input type="text" class="se-input" id="p-name" value="Amit Mehta">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Designation</span><span class="se-row-desc">Your operational role in the company.</span></div>
+          <input type="text" class="se-input" id="p-role" value="R&amp;D &amp; Sustainability Lead">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Email Address</span><span class="se-row-desc">Your corporate email address.</span></div>
+          <input type="email" class="se-input" id="p-email" value="amit.mehta@ecosphere.in">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Phone Number</span><span class="se-row-desc">Your contact mobile/phone number.</span></div>
+          <input type="text" class="se-input" id="p-phone" value="+91 98765 43210">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Location</span><span class="se-row-desc">Your primary working office location.</span></div>
+          <input type="text" class="se-input" id="p-loc" value="Mumbai, India">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Department</span><span class="se-row-desc">The organizational team you lead or are part of.</span></div>
+          <input type="text" class="se-input" id="p-dept" value="R&amp;D Department">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Employee ID</span><span class="se-row-desc">Your unique organization system identifier.</span></div>
+          <input type="text" class="se-input" id="p-eid" value="EMP-RND-0042">
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Bio</span><span class="se-row-desc">A short intro to show on your profile card.</span></div>
+          <textarea class="se-textarea" id="p-bio" placeholder="Write a short bio...">Leading team initiatives for energy reduction and zero-waste sourcing guidelines.</textarea>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Language</span><span class="se-row-desc">System language settings across modules.</span></div>
+          <select class="se-select" id="p-lang"><option>English (US)</option><option>Spanish (ES)</option><option>French (FR)</option><option>Hindi (HI)</option></select>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Timezone</span><span class="se-row-desc">Used for logging timestamps &amp; calendar dates.</span></div>
+          <select class="se-select" id="p-tz"><option>GMT +05:30 (Mumbai, Kolkata)</option><option>GMT +00:00 (London, UTC)</option><option>GMT -05:00 (New York, EST)</option><option>GMT +08:00 (Singapore)</option></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCOUNT SECTION -->
+    <section class="se-section" id="sec-account">
+      <h2 class="se-sec-title">Account Preferences</h2>
+      <p class="se-sec-desc">Manage account credential details, two-factor authentication, and connected sessions.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Corporate Email</span><span class="se-row-desc">Primary contact for notifications and system login.</span></div>
+          <input type="email" class="se-input" id="a-email" value="amit.mehta@ecosphere.in" disabled>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Update Password</span><span class="se-row-desc">Change your account security password.</span></div>
+          <button class="se-btn-outline" onclick="changePassword()">Change Password...</button>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Two Factor Authentication (2FA)</span><span class="se-row-desc">Secure account with OTP generation on mobile.</span></div>
+          <label class="se-toggle"><input type="checkbox" id="a-2fa" checked><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="se-group">
+        <div class="se-group-title">Connected Devices &amp; Sessions</div>
+        <table class="se-table">
+          <thead><tr><th>Device / Browser</th><th>IP Address</th><th>Location</th><th>Last Active</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Chrome (Windows 11)</td><td>192.168.1.42</td><td>Mumbai, IN</td><td>Active Now</td><td><span class="se-badge success">Current</span></td></tr>
+            <tr><td>Firefox (macOS Sequoia)</td><td>184.22.95.12</td><td>Paris, FR</td><td>2 days ago</td><td><a href="#" style="color:var(--se-red);text-decoration:none;" onclick="revokeSession(event)">Revoke</a></td></tr>
+            <tr><td>EcoSphere Mobile (iOS)</td><td>10.0.8.21</td><td>Mumbai, IN</td><td>5 hours ago</td><td><a href="#" style="color:var(--se-red);text-decoration:none;" onclick="revokeSession(event)">Revoke</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS SECTION -->
+    <section class="se-section" id="sec-notifications">
+      <h2 class="se-sec-title">Notification Settings</h2>
+      <p class="se-sec-desc">Choose which alerts you want to receive across multiple communication channels.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Email Notifications</span><span class="se-row-desc">Send weekly summaries, audit updates, and policy notifications.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Browser Push Alerts</span><span class="se-row-desc">Instant updates regarding completed challenges and new events.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">SMS Alerts</span><span class="se-row-desc">High-priority alerts for compliance audits.</span></div>
+          <label class="se-toggle"><input type="checkbox"><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="se-group">
+        <div class="se-group-title">Subscription Categories</div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Challenge Reminders</span><span class="se-row-desc">Alert when registered challenges are expiring or starting soon.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Policy Acknowledgements</span><span class="se-row-desc">Alerts when new compliance documents require sign-off.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Audit Warnings</span><span class="se-row-desc">Immediate notice when carbon transaction values exceed standard goals.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Leaderboard Updates</span><span class="se-row-desc">Weekly recap of rank updates in your department.</span></div>
+          <label class="se-toggle"><input type="checkbox"><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">CSR Volunteering</span><span class="se-row-desc">Notice of new social outreach drives and volunteering schedules.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPEARANCE SECTION -->
+    <section class="se-section" id="sec-appearance">
+      <h2 class="se-sec-title">Appearance Preferences</h2>
+      <p class="se-sec-desc">Customise visual themes, layout grids, font spacing, and motion curves.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Interface Theme</span><span class="se-row-desc">Toggle between dark mode (recommended) and light theme options.</span></div>
+          <select class="se-select" id="ap-theme" onchange="toggleLocalTheme(this.value)">
+            <option value="dark">Dark Theme (Default)</option>
+            <option value="light">Light Theme</option>
+          </select>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Accent Palette</span><span class="se-row-desc">Primary color accent for tabs, charts, buttons, and progress indicators.</span></div>
+          <div class="accent-group">
+            <div class="accent-dot active" style="background:#875A7B;" onclick="setAccent(this,'#875A7B')" title="Odoo Purple"></div>
+            <div class="accent-dot" style="background:#00A09D;" onclick="setAccent(this,'#00A09D')" title="Eco Teal"></div>
+            <div class="accent-dot" style="background:#2ECC71;" onclick="setAccent(this,'#2ECC71')" title="Forest Green"></div>
+            <div class="accent-dot" style="background:#3DBBFF;" onclick="setAccent(this,'#3DBBFF')" title="Ocean Blue"></div>
+            <div class="accent-dot" style="background:#A06AB4;" onclick="setAccent(this,'#A06AB4')" title="Amethyst"></div>
+          </div>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Base Spacing &amp; Scale</span><span class="se-row-desc">Control screen typography font height rules.</span></div>
+          <div style="width:320px;display:flex;align-items:center;gap:12px;">
+            <input type="range" min="12" max="18" value="14" class="form-range" style="flex:1;" id="range-fs" oninput="updateFontSize(this.value)" onchange="updateFontSize(this.value)">
+            <span id="lbl-fs" style="font-size:13px;font-weight:700;color:var(--white);width:36px;text-align:right;">14px</span>
+          </div>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Compact Mode Layout</span><span class="se-row-desc">Reduce vertical heights and margins inside dashboard summary grids.</span></div>
+          <label class="se-toggle"><input type="checkbox" id="ap-compact" onchange="updateCompactMode(this.checked)"><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Interface Animations</span><span class="se-row-desc">Enable smooth transition curves, slide ins, and badge pulses.</span></div>
+          <label class="se-toggle"><input type="checkbox" id="ap-motion" checked onchange="updateAnimations(this.checked)"><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY SECTION -->
+    <section class="se-section" id="sec-privacy">
+      <h2 class="se-sec-title">Privacy Settings</h2>
+      <p class="se-sec-desc">Control visibility parameters for achievements, department scores, and data exports.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Profile Visibility</span><span class="se-row-desc">Allow colleagues from other branches to view your detailed profile card.</span></div>
+          <select class="se-select"><option>Everyone (Public)</option><option>Department Only</option><option>Private (Only Me)</option></select>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Activity Logs Visibility</span><span class="se-row-desc">Colleagues can see when you log CSR achievements or complete challenges.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Leaderboard Placement</span><span class="se-row-desc">Display your global rank (#3) and name on the global dashboard lists.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="se-group">
+        <div class="se-group-title">Data Actions</div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Download Personal Data</span><span class="se-row-desc">Export all your personal carbon metrics, logged CSR events and challenge history in JSON.</span></div>
+          <button class="se-btn-outline" onclick="dlData()"><i data-lucide="download" style="width:12px;height:12px;display:inline-block;margin-right:4px;"></i> Export Data (JSON)</button>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl" style="color:var(--se-red);">Delete ESG Account</span><span class="se-row-desc">Delete your platform data. This action is permanent and clears earned achievements.</span></div>
+          <button class="se-btn-danger" onclick="delAccount()">Delete Account...</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY SECTION -->
+    <section class="se-section" id="sec-security">
+      <h2 class="se-sec-title">Security &amp; Auditing</h2>
+      <p class="se-sec-desc">Verify login logs, audit security tokens, and manage authorization endpoints.</p>
+      
+      <div class="se-group">
+        <div class="se-group-title">Recent Login Activity</div>
+        <table class="se-table">
+          <thead><tr><th>Timestamp</th><th>Device/Browser</th><th>IP Address</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>2026-07-12 13:42</td><td>Chrome (Windows)</td><td>192.168.1.42</td><td><span style="color:var(--se-green);">Successful</span></td></tr>
+            <tr><td>2026-07-11 09:12</td><td>EcoSphere App (iOS)</td><td>10.0.8.21</td><td><span style="color:var(--se-green);">Successful</span></td></tr>
+            <tr><td>2026-07-10 18:24</td><td>Chrome (Windows)</td><td>192.168.1.42</td><td><span style="color:var(--se-green);">Successful</span></td></tr>
+            <tr><td>2026-07-08 22:15</td><td>Unknown Device</td><td>184.22.95.12</td><td><span style="color:var(--se-red);">Failed (2FA Required)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="se-group">
+        <div class="se-group-title">API Access Tokens</div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">EcoSphere Integrations</span><span class="se-row-desc">Allow third-party applications to retrieve ESG metrics.</span></div>
+          <button class="se-btn-outline" onclick="genToken()">Generate Token...</button>
+        </div>
+        <div id="token-box" style="display:none;margin-top:14px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--border-subtle);border-radius:8px;">
+          <div style="font-size:11px;color:var(--text-muted);">Copy your token (will not be shown again):</div>
+          <div style="font-family:monospace;font-size:12px;color:var(--se-gold);margin-top:6px;word-break:break-all;">eco_pat_837b2d83f120e29b8281a8f9024c0e3a8b417</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ESG PREFERENCES SECTION -->
+    <section class="se-section" id="sec-esg">
+      <h2 class="se-sec-title">ESG Preferences</h2>
+      <p class="se-sec-desc">Align dashboard focus views and carbon indicators with your preferred sustainability goals.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Favorite Sustainability Pillars</span><span class="se-row-desc">Highlight specific categories at the top of your dashboard.</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+            <label style="font-size:12px;display:flex;align-items:center;gap:6px;"><input type="checkbox" checked> Environmental (Carbon/Waste)</label>
+            <label style="font-size:12px;display:flex;align-items:center;gap:6px;"><input type="checkbox" checked> Social (Volunteering/CSR)</label>
+            <label style="font-size:12px;display:flex;align-items:center;gap:6px;"><input type="checkbox"> Governance (Compliance/Safety)</label>
+          </div>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Carbon Calculator Metrics</span><span class="se-row-desc">Standard unit system for calculating emission offsets.</span></div>
+          <select class="se-select"><option>Metric Tons CO&#8322;e (Standard)</option><option>Kilograms CO&#8322;e</option><option>Pounds (lbs) CO&#8322;e</option></select>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Default Dashboard Tab</span><span class="se-row-desc">The landing screen you see when opening the platform.</span></div>
+          <select class="se-select"><option>ESG Analytics Overview</option><option>Gamification Hub</option><option>Carbon Ledger</option><option>CSR &amp; Governance Panel</option></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI PREFERENCES SECTION -->
+    <section class="se-section" id="sec-ai">
+      <h2 class="se-sec-title">AI &amp; Smart Engine Preferences</h2>
+      <p class="se-sec-desc">Manage parameters for predictive analysis, weekly coach reports, and recommendations.</p>
+      
+      <div class="se-group">
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Enable AI Sustainability Coach</span><span class="se-row-desc">Activate recommendations, strength analyses, and trajectory forecasts.</span></div>
+          <label class="se-toggle"><input type="checkbox" id="ai-coach" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Weekly ESG Coaching Reports</span><span class="se-row-desc">Receive an intelligent summary of your sustainability actions each Friday.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Prediction Alerts</span><span class="se-row-desc">Notify me when the system predicts that my monthly department score will drop.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+        <div class="se-row">
+          <div class="se-row-info"><span class="se-row-lbl">Smart Challenge Matching</span><span class="se-row-desc">Auto-suggest challenges based on department roles and commute styles.</span></div>
+          <label class="se-toggle"><input type="checkbox" checked><span class="se-toggle-slider"></span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORT SECTION -->
+    <section class="se-section" id="sec-support">
+      <h2 class="se-sec-title">Help &amp; Support</h2>
+      <p class="se-sec-desc">Search documentation, contact admin, report issues, or suggest platform updates.</p>
+      
+      <div class="se-group">
+        <div class="support-list">
+          <div class="support-item" onclick="openDoc()">
+            <div class="support-icon"><i data-lucide="book-open"></i></div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Documentation &amp; User Guides</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Learn how ESG scores, compliance thresholds, and badges are calculated.</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--text-muted);"></i>
+          </div>
+          <div class="support-item" onclick="openContact()">
+            <div class="support-icon" style="background:rgba(0,160,157,.12);color:var(--se-teal);"><i data-lucide="mail"></i></div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Contact Support Admin</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Open an internal query ticket with your sustainability administrator.</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--text-muted);"></i>
+          </div>
+          <div class="support-item" onclick="reportBug()">
+            <div class="support-icon" style="background:rgba(220,53,69,.12);color:var(--se-red);"><i data-lucide="bug"></i></div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Report System Bug</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Encountered display errors or tracking failures? Send log reports.</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--text-muted);"></i>
+          </div>
+          <div class="support-item" onclick="requestFeature()">
+            <div class="support-icon" style="background:rgba(233,161,48,.12);color:var(--se-gold);"><i data-lucide="lightbulb"></i></div>
+            <div style="flex:1;">
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Submit Feature Requests</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Recommend integrations, reward items, or dashboard components.</div>
+            </div>
+            <i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--text-muted);"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-backdrop" id="password-modal">
+  <div class="modal" style="width:420px;">
+    <div class="modal-title-row">
+      <h3 class="modal-title">Change Password</h3>
+      <button class="close-btn" onclick="closePasswordModal()">&times;</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Current Password</label>
+      <input type="password" class="form-control" id="cp-current" placeholder="••••••••" style="width:100%; max-width:none;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">New Password</label>
+      <input type="password" class="form-control" id="cp-new" placeholder="••••••••" style="width:100%; max-width:none;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirm New Password</label>
+      <input type="password" class="form-control" id="cp-confirm" placeholder="••••••••" style="width:100%; max-width:none;">
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="submitPasswordChange()">Update Password</button>
+      <button class="btn btn-secondary" style="flex:1;" onclick="closePasswordModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIXED FOOTER -->
+<footer class="se-footer">
+  <button class="se-btn-outline" style="border:none;" onclick="resetSettings()">Reset to Defaults</button>
+  <button class="se-btn-outline" onclick="window.location.href='dashboard.html'">Cancel</button>
+  <button class="se-btn-outline" style="background:var(--se-purple);border-color:var(--se-purple);color:#fff;" id="btn-save" onclick="saveSettings()">Save Changes</button>
+</footer>
+
+<script src="app.js"></script>
+<script>
+function switchSection(secId) {
+  document.querySelectorAll(".se-side-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".se-section").forEach(sec => sec.classList.remove("active"));
+  
+  event.currentTarget.classList.add("active");
+  document.getElementById("sec-" + secId).classList.add("active");
+}
+
+function toggleLocalTheme(themeVal) {
+  if (themeVal === "light") {
+    document.body.classList.add("light-theme");
+    localStorage.setItem("themeMode", "light");
+  } else {
+    document.body.classList.remove("light-theme");
+    localStorage.setItem("themeMode", "dark");
+  }
+}
+
+function setAccent(el, colorHex) {
+  document.querySelectorAll(".accent-dot").forEach(d => d.classList.remove("active"));
+  el.classList.add("active");
+  document.documentElement.style.setProperty('--se-purple', colorHex);
+  document.documentElement.style.setProperty('--primary-green', colorHex);
+  localStorage.setItem("themeAccentColor", colorHex);
+}
+
+function saveSettings() {
+  const btn = document.getElementById("btn-save");
+  btn.innerHTML = '<span class="spin"></span> Saving...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = 'Changes Saved ✓';
+    btn.disabled = false;
+    setTimeout(() => { btn.innerHTML = 'Save Changes'; }, 1500);
+    
+    // Save to LocalStorage
+    localStorage.setItem("userName", document.getElementById("p-name").value.trim());
+    localStorage.setItem("userRole", document.getElementById("p-role").value.trim());
+    localStorage.setItem("userEmail", document.getElementById("p-email").value.trim());
+    localStorage.setItem("userPhone", document.getElementById("p-phone").value.trim());
+    localStorage.setItem("userLoc", document.getElementById("p-loc").value.trim());
+    localStorage.setItem("userDept", document.getElementById("p-dept").value.trim());
+    localStorage.setItem("userEid", document.getElementById("p-eid").value.trim());
+    localStorage.setItem("userBio", document.getElementById("p-bio").value.trim());
+    localStorage.setItem("userLang", document.getElementById("p-lang").value);
+    localStorage.setItem("userTz", document.getElementById("p-tz").value);
+
+    // Save to appState if available
+    if (typeof appState !== 'undefined' && appState.currentUser) {
+      appState.currentUser.name = document.getElementById("p-name").value.trim();
+      appState.currentUser.role = document.getElementById("p-role").value.trim();
+      appState.currentUser.avatar = document.getElementById("s-avatar-img").src;
+      localStorage.setItem("currentUser", JSON.stringify(appState.currentUser));
+    }
+  }, 1200);
+}
+
+function resetSettings() {
+  if (confirm("Are you sure you want to reset all configurations to default values?")) {
+    document.getElementById("p-name").value = "Amit Mehta";
+    document.getElementById("p-role").value = "R&D & Sustainability Lead";
+    document.getElementById("p-email").value = "amit.mehta@ecosphere.in";
+    document.getElementById("p-phone").value = "+91 98765 43210";
+    document.getElementById("p-loc").value = "Mumbai, India";
+    document.getElementById("p-dept").value = "R&D Department";
+    document.getElementById("p-eid").value = "EMP-RND-0042";
+    document.getElementById("p-bio").value = "Leading team initiatives for energy reduction and zero-waste sourcing guidelines.";
+    document.getElementById("p-lang").value = "English (US)";
+    document.getElementById("p-tz").value = "GMT +05:30 (Mumbai, Kolkata)";
+
+    // Visual preferences
+    document.getElementById("ap-theme").value = "dark";
+    toggleLocalTheme("dark");
+
+    const defaultAccent = "#875A7B";
+    const firstDot = document.querySelector(".accent-dot");
+    if (firstDot) setAccent(firstDot, defaultAccent);
+
+    document.getElementById("range-fs").value = "14";
+    updateFontSize("14");
+
+    document.getElementById("ap-compact").checked = false;
+    updateCompactMode(false);
+
+    document.getElementById("ap-motion").checked = true;
+    updateAnimations(true);
+
+    alert("Preferences reset successfully.");
+  }
+}
+
+function revokeSession(e) {
+  e.preventDefault();
+  if (confirm("Revoke this session? You will be signed out from that device.")) {
+    e.target.closest("tr").remove();
+  }
+}
+
+function dlData() {
+  const dummy = { employee: "Amit Mehta", dept: "R&D", carbonSavedTons: 2.4, completedChallenges: ["Zero Waste Sprint"], loggedCSRs: 2 };
+  const str = JSON.stringify(dummy, null, 2);
+  const blob = new Blob([str], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "EcoSphere_PersonalData_AmitMehta.json";
+  a.click();
+}
+
+function delAccount() {
+  alert("For security reasons, please contact your corporate HR or ESG administrator to permanently delete your EcoSphere login profile.");
+}
+
+function genToken() {
+  document.getElementById("token-box").style.display = "block";
+}
+
+function openDoc() { alert("Loading System Documentation & Guides..."); }
+function openContact() { alert("Support Request Desk opened. Standard response time is <4 hours."); }
+function reportBug() { alert("Debug logger initialized. Please describe the steps to reproduce the error."); }
+function requestFeature() { alert("Idea submission form opened. Thank you for helping us improve EcoSphere!"); }
+
+// Load-time preferences restoration
+window.addEventListener("load", function() {
+  if (window.lucide) window.lucide.createIcons();
+
+  // Load personal settings
+  const savedName = localStorage.getItem("userName");
+  if (savedName) document.getElementById("p-name").value = savedName;
+  const savedRole = localStorage.getItem("userRole");
+  if (savedRole) document.getElementById("p-role").value = savedRole;
+  const savedEmail = localStorage.getItem("userEmail");
+  if (savedEmail) document.getElementById("p-email").value = savedEmail;
+  const savedPhone = localStorage.getItem("userPhone");
+  if (savedPhone) document.getElementById("p-phone").value = savedPhone;
+  const savedLoc = localStorage.getItem("userLoc");
+  if (savedLoc) document.getElementById("p-loc").value = savedLoc;
+  const savedDept = localStorage.getItem("userDept");
+  if (savedDept) document.getElementById("p-dept").value = savedDept;
+  const savedEid = localStorage.getItem("userEid");
+  if (savedEid) document.getElementById("p-eid").value = savedEid;
+  const savedBio = localStorage.getItem("userBio");
+  if (savedBio) document.getElementById("p-bio").value = savedBio;
+  const savedLang = localStorage.getItem("userLang");
+  if (savedLang) document.getElementById("p-lang").value = savedLang;
+  const savedTz = localStorage.getItem("userTz");
+  if (savedTz) document.getElementById("p-tz").value = savedTz;
+
+  // Load theme
+  const savedTheme = localStorage.getItem("themeMode") || "dark";
+  document.getElementById("ap-theme").value = savedTheme;
+
+  // Load avatar
+  const savedAv = localStorage.getItem("userAvatar");
+  if (savedAv) {
+    document.getElementById("s-avatar-img").src = savedAv;
+  }
+
+  // Load Accent
+  const savedAccent = localStorage.getItem("themeAccentColor");
+  if (savedAccent) {
+    document.documentElement.style.setProperty('--se-purple', savedAccent);
+    document.documentElement.style.setProperty('--primary-green', savedAccent);
+    // Highlight matching dot
+    document.querySelectorAll(".accent-dot").forEach(d => {
+      const isMatch = d.style.backgroundColor.toLowerCase() === savedAccent.toLowerCase() || 
+                      (savedAccent === '#875A7B' && d.style.backgroundColor.includes('135')); // handle hex to rgb converting sometimes
+      d.classList.toggle("active", isMatch);
+    });
+  }
+
+  // Load Font Size
+  const savedFS = localStorage.getItem("themeFontSize") || "14";
+  document.getElementById("range-fs").value = savedFS;
+  document.getElementById("lbl-fs").innerText = savedFS + "px";
+  updateFontSize(savedFS);
+
+  // Load Compact Mode
+  const savedCompact = localStorage.getItem("themeCompactMode") === "true";
+  document.getElementById("ap-compact").checked = savedCompact;
+  updateCompactMode(savedCompact);
+
+  // Load Animations
+  const savedMotion = localStorage.getItem("themeAnimations") !== "false"; // default true
+  document.getElementById("ap-motion").checked = savedMotion;
+  updateAnimations(savedMotion);
+});
+
+// Implementation of Appearance changes
+function updateFontSize(val) {
+  document.getElementById("lbl-fs").innerText = val + "px";
+  document.body.style.fontSize = val + "px";
+  localStorage.setItem("themeFontSize", val);
+}
+
+function updateCompactMode(checked) {
+  document.body.classList.toggle("compact-mode", checked);
+  localStorage.setItem("themeCompactMode", checked);
+}
+
+function updateAnimations(checked) {
+  document.body.classList.toggle("no-animations", !checked);
+  localStorage.setItem("themeAnimations", checked);
+}
+
+// Avatar handling
+function changeAvatar() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 25 * 1024 * 1024) {
+      alert("File size exceeds the 25 MB limit.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      document.getElementById("s-avatar-img").src = evt.target.result;
+      localStorage.setItem("userAvatar", evt.target.result);
+      if (typeof appState !== 'undefined' && appState.currentUser) {
+        appState.currentUser.avatar = evt.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function resetAvatar() {
+  const defaultAv = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80";
+  document.getElementById("s-avatar-img").src = defaultAv;
+  localStorage.removeItem("userAvatar");
+  if (typeof appState !== 'undefined' && appState.currentUser) {
+    appState.currentUser.avatar = defaultAv;
+  }
+}
+
+// Change Password Modal handling
+function changePassword() {
+  document.getElementById("password-modal").classList.add("active");
+}
+
+function closePasswordModal() {
+  document.getElementById("password-modal").classList.remove("active");
+  document.getElementById("cp-current").value = "";
+  document.getElementById("cp-new").value = "";
+  document.getElementById("cp-confirm").value = "";
+}
+
+function submitPasswordChange() {
+  const current = document.getElementById("cp-current").value;
+  const newPass = document.getElementById("cp-new").value;
+  const confirmPass = document.getElementById("cp-confirm").value;
+
+  if (!current || !newPass || !confirmPass) {
+    alert("Please fill in all password fields.");
+    return;
+  }
+
+  if (newPass !== confirmPass) {
+    alert("New password and confirm password do not match.");
+    return;
+  }
+
+  if (newPass.length < 6) {
+    alert("New password must be at least 6 characters long.");
+    return;
+  }
+
+  alert("Password successfully updated!");
+  closePasswordModal();
+}
+
+// Close password modal on background click
+document.getElementById("password-modal").addEventListener("click", function(e) {
+  if (e.target === this) closePasswordModal();
+});
+</script>
+</body>
+</html>

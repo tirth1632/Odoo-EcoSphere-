@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  # -- Django Web App ---------------------------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosphere_web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app                         # Mount source for live-reload in dev
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=ecosphere_project.settings
+      - DATABASE_URL=sqlite:////app/db.sqlite3
+    depends_on:
+      - db
+
+  # -- PostgreSQL Database ---------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: ecosphere_db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ecosphere_db
+      POSTGRES_USER: ecosphere_user
+      POSTGRES_PASSWORD: ecosphere_pass
+    ports:
+      - "5432:5432"
+
+  # -- Nginx Reverse Proxy ---------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: ecosphere_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/app/staticfiles:ro
+      - media_volume:/app/media:ro
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

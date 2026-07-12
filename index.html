@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About EcoSphere | Smarter ESG Management</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Load Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Custom Landing Page Styles */
+    body {
+      background-color: var(--bg-dark); /* #121214 */
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .landing-header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 72px;
+      background-color: rgba(18, 18, 20, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .landing-logo {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .landing-logo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-green);
+      letter-spacing: -0.5px;
+    }
+
+    .landing-logo-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 100px 40px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-content {
+      text-align: left;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(135, 90, 123, 0.1);
+      border: 1px solid rgba(135, 90, 123, 0.2);
+      color: var(--purple);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .hero-illustration-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 50px rgba(135, 90, 123, 0.15);
+      animation: floatImage 6s ease-in-out infinite;
+    }
+
+    @keyframes floatImage {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Section Spacing */
+    .section-container {
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-header {
+      margin-bottom: 50px;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--blue);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Section 2: Why EcoSphere Feature Cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: left;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .feature-card.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(135, 90, 123, 0.3);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(135, 90, 123, 0.05);
+    }
+
+    .feature-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 20px;
+    }
+
+    .icon-env { background-color: rgba(0, 160, 157, 0.1); color: var(--blue); }
+    .icon-soc { background-color: rgba(160, 106, 180, 0.1); color: var(--purple); }
+    .icon-gov { background-color: rgba(135, 90, 123, 0.1); color: var(--primary-green); }
+    .icon-gam { background-color: rgba(233, 161, 48, 0.1); color: var(--orange); }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Section 3: Horizontal Workflow Timeline */
+    .timeline-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 50px;
+      position: relative;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 20px 0;
+    }
+
+    .timeline-step {
+      flex: 1;
+      min-width: 180px;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 16px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+      z-index: 2;
+    }
+
+    .timeline-step:hover {
+      border-color: var(--primary-green);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .step-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-green);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .step-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px auto;
+      color: var(--white);
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .timeline-step:hover .step-icon {
+      background-color: var(--primary-green);
+      color: var(--bg-dark);
+      transform: scale(1.08);
+    }
+
+    .timeline-step h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+
+    .step-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .step-badge {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 4px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .timeline-arrow {
+      padding: 0 10px;
+      color: var(--primary-green);
+      animation: pulseArrow 1.5s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes pulseArrow {
+      0%, 100% { transform: translateX(0); opacity: 0.4; }
+      50% { transform: translateX(4px); opacity: 1; }
+    }
+
+    /* Section 4: AI Powered Intelligence */
+    .ai-highlight-section {
+      background-color: rgba(135, 90, 123, 0.02);
+      border: 1px solid rgba(135, 90, 123, 0.1);
+      border-radius: 24px;
+      padding: 60px 40px;
+      margin-top: 40px;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .ai-card {
+      background-color: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: left;
+      transition: all 0.3s;
+    }
+
+    .ai-card:hover {
+      background-color: rgba(135, 90, 123, 0.04);
+      border-color: rgba(135, 90, 123, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .ai-card-icon {
+      color: var(--primary-green);
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: flex;
+    }
+
+    .ai-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .ai-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Section 5: Platform Features Grid */
+    .features-list-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .feature-list-item {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .feature-list-item:hover {
+      border-color: rgba(0, 160, 157, 0.25);
+      background-color: rgba(0, 160, 157, 0.02);
+    }
+
+    .feature-list-item i {
+      color: var(--blue);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .feature-list-item span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    /* Section 6: Tech Stack Grid */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .tech-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .tech-card:hover {
+      border-color: var(--border-subtle);
+      transform: translateY(-2px);
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .tech-category {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .tech-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    /* Section 7: Impact Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .stat-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px 16px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--purple);
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--primary-green);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Section 8: Mission Banner */
+    .mission-banner {
+      background: linear-gradient(135deg, rgba(135, 90, 123, 0.1) 0%, rgba(0, 160, 157, 0.1) 100%);
+      border: 1px solid rgba(135, 90, 123, 0.2);
+      border-radius: 24px;
+      padding: 60px 40px;
+      margin: 60px auto;
+      max-width: 1200px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-quote {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--white);
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+      letter-spacing: -0.5px;
+    }
+
+    .mission-author {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary-green);
+    }
+
+    /* Section 9: FAQ Accordions */
+    .faq-wrapper {
+      max-width: 800px;
+      margin: 40px auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-accordion {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .faq-trigger {
+      width: 100%;
+      padding: 20px 24px;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      outline: none;
+    }
+
+    .faq-trigger i {
+      color: var(--text-muted);
+      transition: transform 0.3s;
+    }
+
+    .faq-accordion.active {
+      border-color: rgba(135, 90, 123, 0.3);
+    }
+
+    .faq-accordion.active .faq-trigger i {
+      transform: rotate(180deg);
+      color: var(--primary-green);
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .faq-content-inner {
+      padding: 0 24px 24px 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .landing-footer {
+      border-top: 1px solid var(--border-subtle);
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 60px 40px 40px 40px;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .footer-brand {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 260px;
+    }
+
+    .footer-col {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-col h5 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--primary-green);
+    }
+
+    .footer-col {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Button Glow Microinteraction */
+    .btn-primary.glow-btn {
+      position: relative;
+      box-shadow: 0 0 16px rgba(135, 90, 123, 0.4);
+    }
+
+    .btn-primary.glow-btn:hover {
+      box-shadow: 0 0 24px rgba(135, 90, 123, 0.6);
+    }
+
+    /* Responsiveness adjustments */
+    @media (max-width: 992px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+      }
+      .hero-content {
+        text-align: center;
+      }
+      .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-actions {
+        justify-content: center;
+      }
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .ai-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .features-list-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .ai-grid {
+        grid-template-columns: 1fr;
+      }
+      .features-list-grid {
+        grid-template-columns: 1fr;
+      }
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Translate Hidden Combo -->
+  <div id="google_translate_element" style="display:none;"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi,bn,te,ta,gu,mr,ur,kn,ml,or,pa,as,mai,sa,ks,sd,kok,doi,mni,brx,sat,ne',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+  <!-- Landing Header -->
+  <header class="landing-header">
+    <div class="landing-logo">
+      <span class="landing-logo-title">EcoSphere</span>
+      <span class="landing-logo-subtitle">ESG Management Platform</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <!-- Language Selector Dropdown -->
+      <div class="lang-selector-wrapper notranslate" translate="no">
+        <button class="lang-btn notranslate" id="lang-btn" onclick="toggleLangDropdown(event)" translate="no">
+          <i data-lucide="languages" style="width: 14px; height: 14px;"></i>
+          <span id="active-lang" class="notranslate" translate="no">EN</span>
+          <i data-lucide="chevron-down" style="width: 10px; height: 10px; margin-left: 2px;"></i>
+        </button>
+        <div class="lang-dropdown notranslate" id="lang-dropdown" translate="no">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+      <a href="dashboard.html" class="btn btn-secondary">
+        <i data-lucide="arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i data-lucide="sparkles"></i> Built for Odoo Hackathon 2026
+      </div>
+      <h1 class="hero-title">
+        EcoSphere<br>
+        <span>Smarter ESG Management</span><br>
+        for Modern Organizations
+      </h1>
+      <p class="hero-desc">
+        EcoSphere is an AI-powered ESG Management Platform that enables organizations to measure, monitor, improve and report their Environmental, Social and Governance performance from a single unified platform.
+      </p>
+      <div class="hero-actions">
+        <a href="dashboard.html" class="btn btn-primary glow-btn" style="height: 44px; padding: 0 24px; text-decoration: none;">
+          Explore Dashboard <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="btn btn-secondary" onclick="openDemoModal()" style="height: 44px; padding: 0 24px;">
+          <i data-lucide="play"></i> Watch Demo
+        </button>
+      </div>
+    </div>
+    <div class="hero-illustration-container">
+      <img src="esg_hero_illustration.png" alt="ESG Dashboard Illustration" class="hero-illustration">
+    </div>
+  </section>
+
+  <!-- Section 2: Why EcoSphere? -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle);">
+    <div class="section-header">
+      <span class="section-tag">Value Proposition</span>
+      <h2 class="section-title">Why EcoSphere?</h2>
+      <p class="section-subtitle">A comprehensive, end-to-end framework linking operational resource tracking with community metrics, audits, and automated AI assistance.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card scroll-animate">
+        <div class="feature-icon-wrapper icon-env">
+          <i data-lucide="leaf"></i>
+        </div>
+        <h3>🌱 Environmental</h3>
+        <p>Track emissions, energy usage, pollution and sustainability goals. Automate scope 1, 2, and 3 calculations directly from ERP inputs.</p>
+      </div>
+
+      <div class="feature-card scroll-animate">
+        <div class="feature-icon-wrapper icon-soc">
+          <i data-lucide="users"></i>
+        </div>
+        <h3>🤝 Social</h3>
+        <p>Manage CSR activities, employee participation and workplace engagement. Cultivate a green culture through transparent scoreboards.</p>
+      </div>
+
+      <div class="feature-card scroll-animate">
+        <div class="feature-icon-wrapper icon-gov">
+          <i data-lucide="scale"></i>
+        </div>
+        <h3>🛡 Governance</h3>
+        <p>Monitor compliance policies, audit logs, transparency benchmarks, and active internal violations with integrated due-date remediation.</p>
+      </div>
+
+      <div class="feature-card scroll-animate">
+        <div class="feature-icon-wrapper icon-gam">
+          <i data-lucide="trophy"></i>
+        </div>
+        <h3>🏆 Gamification</h3>
+        <p>Motivate teams with challenge quests, XP points, rewards catalog, and leaderboards. Drive voluntary sustainability contributions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: How EcoSphere Works (Horizontal Workflow Timeline) -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle); overflow: hidden;">
+    <div class="section-header">
+      <span class="section-tag">Data Architecture</span>
+      <h2 class="section-title">How EcoSphere Works</h2>
+      <p class="section-subtitle">An automated data pipeline that translates physical operational activities into audited indicators and predictive dashboards.</p>
+    </div>
+
+    <div class="timeline-container">
+      <div class="timeline-step">
+        <span class="step-number">Step 01</span>
+        <div class="step-icon"><i data-lucide="database"></i></div>
+        <h4>Collect Operational Data</h4>
+        <div class="step-badges">
+          <span class="step-badge">ERP Invoices</span>
+          <span class="step-badge">Fleet Fuel Log</span>
+          <span class="step-badge">Manufacturing</span>
+          <span class="step-badge">Energy usage</span>
+        </div>
+      </div>
+
+      <div class="timeline-arrow">
+        <i data-lucide="arrow-right" style="width:20px; height:20px;"></i>
+      </div>
+
+      <div class="timeline-step">
+        <span class="step-number">Step 02</span>
+        <div class="step-icon"><i data-lucide="cpu"></i></div>
+        <h4>AI Processing</h4>
+        <div class="step-badges">
+          <span class="step-badge">Data Cleaning</span>
+          <span class="step-badge">Carbon Conversion</span>
+          <span class="step-badge">Risk Analysis</span>
+          <span class="step-badge">Emission Forecast</span>
+        </div>
+      </div>
+
+      <div class="timeline-arrow">
+        <i data-lucide="arrow-right" style="width:20px; height:20px;"></i>
+      </div>
+
+      <div class="timeline-step">
+        <span class="step-number">Step 03</span>
+        <div class="step-icon"><i data-lucide="percent"></i></div>
+        <h4>ESG Score Calculation</h4>
+        <div class="step-badges">
+          <span class="step-badge">Environmental Wt</span>
+          <span class="step-badge">Social Contribution</span>
+          <span class="step-badge">Governance Audit</span>
+          <span class="step-badge">Overall Score</span>
+        </div>
+      </div>
+
+      <div class="timeline-arrow">
+        <i data-lucide="arrow-right" style="width:20px; height:20px;"></i>
+      </div>
+
+      <div class="timeline-step">
+        <span class="step-number">Step 04</span>
+        <div class="step-icon"><i data-lucide="layout-dashboard"></i></div>
+        <h4>Dashboard & KPIs</h4>
+        <div class="step-badges">
+          <span class="step-badge">Real-Time Charts</span>
+          <span class="step-badge">Odoo PDF Reports</span>
+          <span class="step-badge">LED Indicators</span>
+          <span class="step-badge">Trend Lines</span>
+        </div>
+      </div>
+
+      <div class="timeline-arrow">
+        <i data-lucide="arrow-right" style="width:20px; height:20px;"></i>
+      </div>
+
+      <div class="timeline-step">
+        <span class="step-number">Step 05</span>
+        <div class="step-icon"><i data-lucide="sparkles"></i></div>
+        <h4>AI Recommendations</h4>
+        <div class="step-badges">
+          <span class="step-badge">Carbon Reduction</span>
+          <span class="step-badge">Compliance Fixes</span>
+          <span class="step-badge">Challenge Invites</span>
+          <span class="step-badge">Active Alerts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: AI Powered Intelligence -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle);">
+    <div class="ai-highlight-section">
+      <div class="section-header">
+        <span class="section-tag" style="color: var(--purple);">Machine Learning Models</span>
+        <h2 class="section-title">Artificial Intelligence at the Core</h2>
+        <p class="section-subtitle">EcoSphere embeds production-grade ML models to forecast, categorize, and advise sustainability directors proactively.</p>
+      </div>
+
+      <div class="ai-grid">
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="wind"></i></span>
+          <h4>AQI Prediction</h4>
+          <p>LSTM neural networks predict Air Quality Index (AQI) based on regional atmospheric sensors and particulate levels.</p>
+        </div>
+
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="trending-up"></i></span>
+          <h4>Carbon Emission Forecasting</h4>
+          <p>Prophet forecasting model projects monthly greenhouse gas emissions to warn managers of budget overruns.</p>
+        </div>
+
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="alert-triangle"></i></span>
+          <h4>Compliance Risk Prediction</h4>
+          <p>Classification models flags departments at risk of regulatory audit failures based on open compliance tickets.</p>
+        </div>
+
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="percent"></i></span>
+          <h4>ESG Score Prediction</h4>
+          <p>Simulates the impact of operational changes on the organization's corporate ESG score beforehand.</p>
+        </div>
+
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="bar-chart-2"></i></span>
+          <h4>Department Performance Analysis</h4>
+          <p>Unsupervised clustering identifies low-performing segments and benchmarks top ecological contributors.</p>
+        </div>
+
+        <div class="ai-card">
+          <span class="ai-card-icon"><i data-lucide="lightbulb"></i></span>
+          <h4>Smart Sustainability Recommendations</h4>
+          <p>Reinforcement learning suggests corrective offsets and gamified challenges customized per employee profile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Platform Features Grid -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle);">
+    <div class="section-header">
+      <span class="section-tag">Feature Matrix</span>
+      <h2 class="section-title">Platform Features</h2>
+      <p class="section-subtitle">An enterprise SaaS suite engineered for complete carbon visibility, social gamification, and compliance auditing.</p>
+    </div>
+
+    <div class="features-list-grid">
+      <div class="feature-list-item"><i data-lucide="layout"></i><span>Real-Time Dashboard</span></div>
+      <div class="feature-list-item"><i data-lucide="file-text"></i><span>Smart Reports</span></div>
+      <div class="feature-list-item"><i data-lucide="calculator"></i><span>Carbon Calculator</span></div>
+      <div class="feature-list-item"><i data-lucide="heart"></i><span>CSR Management</span></div>
+      <div class="feature-list-item"><i data-lucide="shield"></i><span>Policy Tracking</span></div>
+      <div class="feature-list-item"><i data-lucide="swords"></i><span>Challenge System</span></div>
+      <div class="feature-list-item"><i data-lucide="award"></i><span>Leaderboards</span></div>
+      <div class="feature-list-item"><i data-lucide="gift"></i><span>Rewards Shop</span></div>
+      <div class="feature-list-item"><i data-lucide="file-check"></i><span>Audit Tracking</span></div>
+      <div class="feature-list-item"><i data-lucide="line-chart"></i><span>Advanced Analytics</span></div>
+      <div class="feature-list-item"><i data-lucide="smartphone"></i><span>Mobile Responsive</span></div>
+      <div class="feature-list-item"><i data-lucide="message-square"></i><span>AI Assistant Coach</span></div>
+    </div>
+  </section>
+
+  <!-- Section 6: Technology Stack -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle);">
+    <div class="section-header">
+      <span class="section-tag">Engineered Stack</span>
+      <h2 class="section-title">Technology Stack</h2>
+      <p class="section-subtitle">Scalable, secure, and modern stack built to support large enterprise data processing and beautiful UI rendering.</p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <span class="tech-category">Frontend</span>
+        <span class="tech-name">React</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Frontend</span>
+        <span class="tech-name">Next.js</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Frontend</span>
+        <span class="tech-name">Tailwind CSS</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Backend</span>
+        <span class="tech-name">Python</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Backend</span>
+        <span class="tech-name">FastAPI</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Backend</span>
+        <span class="tech-name">PostgreSQL</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Machine Learning</span>
+        <span class="tech-name">Scikit-Learn</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Machine Learning</span>
+        <span class="tech-name">XGBoost</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Machine Learning</span>
+        <span class="tech-name">Pandas</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Visualization</span>
+        <span class="tech-name">Chart.js</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Visualization</span>
+        <span class="tech-name">Leaflet</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Deployment</span>
+        <span class="tech-name">Docker</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">ERP Core</span>
+        <span class="tech-name">Odoo v17</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Cloud</span>
+        <span class="tech-name">Google Cloud</span>
+      </div>
+      <div class="tech-card">
+        <span class="tech-category">Security</span>
+        <span class="tech-name">OAuth 2.0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Impact statistics -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle);">
+    <div class="section-header">
+      <span class="section-tag">Performance metrics</span>
+      <h2 class="section-title">Measurable Platform Impact</h2>
+      <p class="section-subtitle">Real metrics observed by organizations transitioning to automated AI ESG auditing.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" data-target="95" data-suffix="%">0%</div>
+        <div class="stat-label">Faster ESG Reporting</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="40" data-suffix="%">0%</div>
+        <div class="stat-label">Reduction in Manual Work</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="25" data-suffix="%">0%</div>
+        <div class="stat-label">Increase in CSR Engagement</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="100" data-suffix="%">0%</div>
+        <div class="stat-label">Centralized ESG Visibility</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Mission Banner -->
+  <section class="mission-banner">
+    <p class="mission-quote">
+      "Our mission is to make ESG management simple, transparent and intelligent by combining enterprise resource planning with artificial intelligence to help organizations create measurable environmental and social impact."
+    </p>
+    <div class="mission-author">The EcoSphere Development Team</div>
+  </section>
+
+  <!-- Section 9: FAQ Accordions -->
+  <section class="section-container" style="border-top: 1px solid var(--border-subtle); padding-bottom: 120px;">
+    <div class="section-header">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Learn more about the ESG calculation models, AI capabilities, and ERP integrations.</p>
+    </div>
+
+    <div class="faq-wrapper">
+      <div class="faq-accordion">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          What is ESG?
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-content">
+          <div class="faq-content-inner">
+            ESG stands for Environmental, Social, and Governance. It represents the three central factors in measuring the sustainability and ethical impact of an investment or business operation. EcoSphere quantifies these factors into live indicators.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-accordion">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          How are ESG scores calculated?
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-content">
+          <div class="faq-content-inner">
+            ESG scores are computed from weighted inputs of carbon footprint records (Environmental), social engagement counts and employee CSR activities (Social), and completed compliance logs and audit filings (Governance). These weights can be customized dynamically by admins.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-accordion">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          How does AI help?
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-content">
+          <div class="faq-content-inner">
+            Our AI engine automates conversion of physical invoices into carbon equivalents, forecasts future carbon emissions, analyzes compliance risk margins, and dynamically gives sustainability suggestions tailored to specific corporate profiles.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-accordion">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          How is employee data protected?
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-content">
+          <div class="faq-content-inner">
+            All employee participation data, logs, and activity records are encrypted at rest and in transit. Standard RBAC (Role-Based Access Control) ensures that settings and details are restricted based on credentials and privileges.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-accordion">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Can EcoSphere integrate with ERP systems?
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="faq-content">
+          <div class="faq-content-inner">
+            Yes, EcoSphere is built to integrate natively with Odoo ERP modules (Purchase Orders, Manufacturing, Fleet, and HR modules) to automatically pull carbon invoices and activity ledgers without duplicate manual data logging.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="landing-logo">
+          <span class="landing-logo-title">EcoSphere</span>
+          <span class="landing-logo-subtitle">ESG Management Platform</span>
+        </div>
+        <p class="footer-desc">
+          Next-generation corporate sustainability tracker blending machine learning with Odoo enterprise infrastructure.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Documentation</a>
+          <a href="#" class="footer-link">API Reference</a>
+          <a href="#" class="footer-link">Security Center</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h5>Developer</h5>
+        <div class="footer-links">
+          <a href="https://github.com" class="footer-link" target="_blank">GitHub</a>
+          <a href="#" class="footer-link">Release Notes</a>
+          <a href="#" class="footer-link">Odoo App Store</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#" class="footer-link">Contact Support</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 EcoSphere. All rights reserved.</span>
+      <span>Built for Odoo Hackathon 2026 | Version 1.1.0</span>
+    </div>
+  </footer>
+
+  <!-- Watch Demo Modal Backdrop -->
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal" style="width: 600px; background-color: var(--sidebar-bg); max-height: 90vh;">
+      <div class="modal-title-row" style="margin-bottom: 12px;">
+        <h3 class="modal-title"><i data-lucide="play-circle" style="color:var(--primary-green); vertical-align:middle; margin-right:8px;"></i> EcoSphere Platform Tour</h3>
+        <button class="close-btn" onclick="closeDemoModal()">&times;</button>
+      </div>
+      
+      <div style="border-radius: 12px; overflow: hidden; background-color: var(--bg-dark); border: 1px solid var(--border-subtle); padding: 40px; text-align: center; display:flex; flex-direction:column; gap:20px; align-items:center;">
+        <div style="width:72px; height:72px; border-radius:50%; background-color:rgba(135,90,123,0.1); display:flex; align-items:center; justify-content:center; color:var(--primary-green);">
+          <i data-lucide="swatchbook" style="width:36px; height:36px;"></i>
+        </div>
+        <div>
+          <h4 style="font-size:18px; font-weight:600; color:var(--white); margin-bottom:8px;">Interactive Data Tour</h4>
+          <p style="font-size:13px; color:var(--text-muted); line-height:1.6; max-width:440px;">
+            EcoSphere binds natively to Odoo Purchase Orders, Fleet metrics, and HR tables, calculation models convert operational metrics to live carbon factors automatically.
+          </p>
+        </div>
+        
+        <div style="width:100%; border-top: 1px solid var(--border-subtle); padding-top:16px; text-align:left; display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text-muted);">
+          <div style="display:flex; justify-content:space-between;">
+            <span><i data-lucide="check-circle-2" style="width:14px; height:14px; color:var(--primary-green); vertical-align:middle; margin-right:4px;"></i> Live ESG Weight adjusters</span>
+            <span><i data-lucide="check-circle-2" style="width:14px; height:14px; color:var(--primary-green); vertical-align:middle; margin-right:4px;"></i> ML emissions forecasting</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span><i data-lucide="check-circle-2" style="width:14px; height:14px; color:var(--primary-green); vertical-align:middle; margin-right:4px;"></i> Policy sign-off checklists</span>
+            <span><i data-lucide="check-circle-2" style="width:14px; height:14px; color:var(--primary-green); vertical-align:middle; margin-right:4px;"></i> CSR rewards program</span>
+          </div>
+        </div>
+        
+        <a href="dashboard.html" class="btn btn-primary" style="width:100%; height:40px; margin-top:8px; text-decoration:none;">
+          Start Exploring Live Application
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const currentLanguageCode = localStorage.getItem("selectedLanguageCode") || "en";
+      document.cookie = "googtrans=/en/" + currentLanguageCode + "; path=/;";
+      document.cookie = "googtrans=/en/" + currentLanguageCode + "; path=/; domain=" + window.location.hostname + ";";
+    })();
+
+    // Initialize Lucide icons
+    if (window.lucide) window.lucide.createIcons();
+
+    // FAQ Accordion Toggle
+    function toggleFaq(button) {
+      const accordion = button.parentElement;
+      const content = accordion.querySelector(".faq-content");
+      const isActive = accordion.classList.contains("active");
+
+      // Close all accordions
+      document.querySelectorAll(".faq-accordion").forEach(item => {
+        item.classList.remove("active");
+        item.querySelector(".faq-content").style.maxHeight = null;
+      });
+
+      if (!isActive) {
+        accordion.classList.add("active");
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    }
+
+    // Scroll Triggered Card Entry Animations
+    const observerOptions = {
+      root: null,
+      threshold: 0.1,
+      rootMargin: "0px"
+    };
+
+    const animateOnScrollObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-in");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll(".scroll-animate").forEach(card => {
+      animateOnScrollObserver.observe(card);
+    });
+
+    // Stats Counters Animation on Scroll
+    let statsAnimated = false;
+    const statsSection = document.querySelector(".stats-grid");
+    
+    if (statsSection) {
+      const statsObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !statsAnimated) {
+            statsAnimated = true;
+            animateCounters();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      
+      statsObserver.observe(statsSection);
+    }
+
+    function animateCounters() {
+      const stats = document.querySelectorAll(".stat-number");
+      stats.forEach(stat => {
+        const target = parseInt(stat.getAttribute("data-target"), 10);
+        const suffix = stat.getAttribute("data-suffix") || "";
+        let count = 0;
+        const duration = 1200; // ms
+        const increment = target / (duration / 16); // ~60fps
+        
+        const update = () => {
+          count += increment;
+          if (count >= target) {
+            stat.textContent = target + suffix;
+          } else {
+            stat.textContent = Math.floor(count) + suffix;
+            requestAnimationFrame(update);
+          }
+        };
+        update();
+      });
+    }
+
+    // Video Tour Modal Functions
+    function openDemoModal() {
+      const modal = document.getElementById("demo-modal");
+      modal.style.display = "flex";
+      setTimeout(() => {
+        modal.classList.add("active");
+      }, 10);
+    }
+
+    function closeDemoModal() {
+      const modal = document.getElementById("demo-modal");
+      modal.classList.remove("active");
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 200);
+    }
+
+    // ================= LANGUAGE SELECTOR ENGINE =================
+    const indianLanguages = [
+      { code: "en", name: "English", native: "English" },
+      { code: "hi", name: "Hindi", native: "हिन्दी" },
+      { code: "bn", name: "Bengali", native: "বাংলা" },
+      { code: "te", name: "Telugu", native: "తెలుగు" },
+      { code: "mr", name: "Marathi", native: "मराठी" },
+      { code: "ta", name: "Tamil", native: "தமிழ்" },
+      { code: "ur", name: "Urdu", native: "اردو" },
+      { code: "gu", name: "Gujarati", native: "ગુજરાતી" },
+      { code: "kn", name: "Kannada", native: "ಕನ್ನಡ" },
+      { code: "ml", name: "Malayalam", native: "മലയാളം" },
+      { code: "or", name: "Odia", native: "ଓଡ଼ିଆ" },
+      { code: "pa", name: "Punjabi", native: "ਪੰਜਾਬੀ" },
+      { code: "as", name: "Assamese", native: "অসমীয়া" },
+      { code: "ma", name: "Maithili", native: "मैथिली" },
+      { code: "sa", name: "Sanskrit", native: "संस्कृतम्" },
+      { code: "ks", name: "Kashmiri", native: "کٲशুর" },
+      { code: "sd", name: "Sindhi", native: "सिन्धी" },
+      { code: "ko", name: "Konkani", native: "कोंकणी" },
+      { code: "dg", name: "Dogri", native: "डोगरी" },
+      { code: "mn", name: "Manipuri", native: "মৈতৈলোন" },
+      { code: "bo", name: "Bodo", native: "बर'" },
+      { code: "ne", name: "Nepali", native: "नेपाली" },
+      { code: "sl", name: "Santali", native: "संताली" }
+    ];
+
+    let currentLanguageCode = localStorage.getItem("selectedLanguageCode") || "en";
+
+    function initLanguageSelector() {
+      const dropdown = document.getElementById("lang-dropdown");
+      if (!dropdown) return;
+
+      dropdown.innerHTML = "";
+      indianLanguages.forEach(lang => {
+        const opt = document.createElement("div");
+        opt.className = `lang-option ${lang.code === currentLanguageCode ? 'selected' : ''}`;
+        opt.innerHTML = `
+          <span>${lang.native}</span>
+          <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px;">${lang.name}</span>
+        `;
+        opt.addEventListener("click", () => {
+          selectLanguage(lang.code);
+        });
+        dropdown.appendChild(opt);
+      });
+
+      // Update button label on initialization
+      const activeLangLabel = document.getElementById("active-lang");
+      if (activeLangLabel) activeLangLabel.textContent = currentLanguageCode.toUpperCase();
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".lang-selector-wrapper")) {
+          dropdown.classList.remove("active");
+        }
+      });
+    }
+
+    function toggleLangDropdown(event) {
+      if (event) event.stopPropagation();
+      const dropdown = document.getElementById("lang-dropdown");
+      if (dropdown) dropdown.classList.toggle("active");
+    }
+
+    function selectLanguage(code) {
+      currentLanguageCode = code;
+      localStorage.setItem("selectedLanguageCode", code);
+
+      // Set Translate cookies
+      document.cookie = "googtrans=/en/" + code + "; path=/;";
+      document.cookie = "googtrans=/en/" + code + "; path=/; domain=" + window.location.hostname + ";";
+
+      // Reload page to force Google Translate initialization with the new language
+      window.location.reload();
+    }
+
+    // Load initial selector on run
+    initLanguageSelector();
+  </script>
+</body>
+</html>
