@@ -1,0 +1,42 @@
+upstream ecosphere_app {
+    server web:8000;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+
+    client_max_body_size 20M;
+
+    # Static files served directly by Nginx
+    location /static/ {
+        alias /app/staticfiles/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Media files
+    location /media/ {
+        alias /app/media/;
+        expires 7d;
+    }
+
+    # Proxy all other requests to Gunicorn
+    location / {
+        proxy_pass http://ecosphere_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+        proxy_read_timeout 120;
+        proxy_connect_timeout 75;
+    }
+
+    # Health check endpoint
+    location /health/ {
+        access_log off;
+        return 200 'EcoSphere OK';
+        add_header Content-Type text/plain;
+    }
+}
